@@ -1,5 +1,20 @@
 <ion-view title="Settings">
 	<ion-content>
-		<h1>Settings</h1>
+		<ion-list>
+			<ion-item class="item-input">
+				<label class="input-label">IP Address</label>
+				<input type="text" ng-model="vm.ipAddress" required>
+			</ion-item>
+			<ion-item class="item-input">
+				<label class="input-label">Port Number</label>
+				<input type="text" ng-model="vm.portNum" required>
+			</ion-item>
+			<button class="button button-block button-positive" ng-click="vm.startCommand()">{{vm.btnString}}</button>
+		</ion-list>
+		<br />
+		<ion-list>
+			<ion-item class="item-divider">Messages from socket {{vm.ipAddress}}:{{vm.portNum}} -></ion-item>
+			<ion-item ng-repeat="msg in vm.msgs">{{msg}}</ion-item>
+		</ion-list>
 	</ion-content>
 </ion-view>

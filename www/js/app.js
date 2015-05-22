@@ -1,6 +1,4 @@
 // Ionic Starter App
-/// <reference path="../scripts/reference.d.ts" />
-
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
@@ -26,7 +24,8 @@ angular.module('app', ['ionic'])
   $stateProvider
     .state('introduction', {
       url: '/introduction',
-      templateUrl: 'introduction/introduction.html'
+      templateUrl: 'introduction/introduction.html',
+      controller: 'IntroductionCtrl as vm'
     })
   
     .state('home', {
@@ -39,7 +38,8 @@ angular.module('app', ['ionic'])
       url: '/monitor',
       views: {
         'tabMonitor': {
-          templateUrl: 'home/monitor.html'
+          templateUrl: 'home/monitor.html',
+          controller: 'home.MonitorCtrl as vm'
         }
       }
     })
@@ -48,16 +48,18 @@ angular.module('app', ['ionic'])
       url: '/chart',
       views: {
         'tabChart': {
-          templateUrl: 'home/chart.html'
+          templateUrl: 'home/chart.html',
+          controller: 'home.ChartCtrl as vm'
         }
       }
     })
     
     .state('settings', {
       url: '/settings',
-      templateUrl: 'settings/settings.html'
+      templateUrl: 'settings/settings.html',
+      controller: 'SettingsCtrl as vm'
     });
     
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/introduction');
+  $urlRouterProvider.otherwise('/settings');
 });
