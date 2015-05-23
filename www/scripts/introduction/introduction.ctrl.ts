@@ -2,14 +2,17 @@
 
 module app.introduction{
 	interface IIntroductionCtrl {
-		title: string;
+		introduction: string;
 	}
 	
 	class IntroductionCtrl implements IIntroductionCtrl{
-		title: string;
+		introduction: string = 'Please open settings pane for connecting to the server.';
 		
-		constructor() {
-			this.title = 'Introduction';
+		static $inject = ['DataSvc'];
+		constructor(private _dataSvc: app.service.IDataSvc) {
+			this._dataSvc.onIntroductionReceived = i => {
+				this.introduction = i;
+			}
 		}
 	}
 	

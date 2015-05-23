@@ -1,20 +1,27 @@
-<ion-view title="Settings">
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">Settings</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="hideModal()">Done</button>
+    </div>
+  </ion-header-bar>
 	<ion-content>
-		<ion-list>
+		<form name="settingsForm" novalidate>
 			<ion-item class="item-input">
 				<label class="input-label">IP Address</label>
-				<input type="text" ng-model="vm.ipAddress" required>
+				<input type="text" ng-model="vm.ipAddress" name="ipAddr" required />
 			</ion-item>
 			<ion-item class="item-input">
 				<label class="input-label">Port Number</label>
-				<input type="text" ng-model="vm.portNum" required>
+				<input type="text" ng-model="vm.portNum" name="portNum" required />
 			</ion-item>
-			<button class="button button-block button-positive" ng-click="vm.startCommand()">{{vm.btnString}}</button>
-		</ion-list>
+			<a class="button button-block button-positive" ng-click="vm.startCommand()" 
+				ng-disabled="settingsForm.ipAddr.$invalid || settingsForm.portNum.$invalid && !vm.isListening">{{vm.btnString}}</a>
+		</form>
 		<br />
 		<ion-list>
-			<ion-item class="item-divider">Messages from socket {{vm.ipAddress}}:{{vm.portNum}} -></ion-item>
+			<ion-item class="item-divider">Messages from socket ws://{{vm.ipAddress}}:{{vm.portNum}} -></ion-item>
 			<ion-item ng-repeat="msg in vm.msgs">{{msg}}</ion-item>
 		</ion-list>
 	</ion-content>
-</ion-view>
+</ion-modal-view>

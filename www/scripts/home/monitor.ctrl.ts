@@ -1,15 +1,17 @@
 /// <reference path="../_reference.ts" />
 
 module app.home {
-	interface IMonitorCtrl {
-		title: string;
-	}
+	class MonitorCtrl implements app.interfaces.IMonitorCtrl {
+		Data: app.interfaces.IDataModel[];
 
-	class MonitorCtrl implements IMonitorCtrl {
-		title: string;
-
-		constructor() {
-			this.title = "Monitor";
+		static $inject = ['DataSvc'];
+		constructor(private _dataSvc: app.service.IDataSvc) {
+			this.Data = [{
+				rowid: 0,
+				ServerID: 1,
+				Names: ['aaa', 'bbb', 'ccc'],
+				Values: [2, 3, 4]
+			}];
 		}
 	}
 

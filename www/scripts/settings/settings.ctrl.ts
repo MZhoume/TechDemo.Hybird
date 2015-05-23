@@ -1,38 +1,83 @@
 /// <reference path="../_reference.ts" />
 
 module app.settings {
+	interface IModelScope extends angular.IScope {
+		model: Ionic.IModal;
+
+		showModal(): void;
+		hideModal(): void;
+	}
+
 	interface ISettingsCtrl {
 		ipAddress: string;
 		portNum: number;
 		msgs: string[];
 		btnString: string;
 
-		startCommand: () => void;
+		startCommand(): void;
 	}
 
 	class SettingsCtrl implements ISettingsCtrl {
 		ipAddress: string;
 		portNum: number;
-		msgs: string[];
+		msgs: string[] = [];
 		btnString: string = 'Start';
 
-		private isListening: boolean;
+		private _isListening: boolean = false;
 
-		constructor() {
-			this.msgs = [];
+		static $inject = ['$scope', 'SocketSvc', '$ionicPopup', 'DataSvc', '$ionicModal'];
+		constructor(private _scope: IModelScope,
+			private _socketSvc: app.service.ISocketSvc,
+			private _ionicPopup: Ionic.IPopup,
+			private _dataSvc: app.service.IDataSvc,
+			private _ionicModel: Ionic.IModal) {
+			_ionicModel.fromTemplateUrl('../../settings/settings.html', {
+				scope: _scope,
+				animation: 'slide-in-up'
+			}).then(m => {
+				_scope.model = m;
+			});
+
+			_scope.showModal = () => {
+				_scope.model.show();
+			}
+
+			_scope.hideModal = () => {
+				_scope.model.hide();
+			}
 		}
 
 		startCommand(): void {
-			if (!this.isListening) {
+			if (!this._isListening) {
 				this.msgs = [];
 				this.msgs.push('Start Listening...');
-
-				this.isListening = true;
+				this._isListening = true;
 				this.btnString = 'Stop';
+
+				this._socketSvc.StartListening(this.ipAddress, this.portNum,
+					(msg) => {
+						this.msgs.push("Data received at " + msg.timeStamp);
+						this._dataSvc.onMsgReceived(msg);
+					},
+					(err) => {
+						this.msgs.push(err);
+						this._ionicPopup.show({
+							title: 'Error!',
+							template: 'An error occured while connecting to server...',
+							buttons: [{ text: 'OK' }]
+						});
+						this._isListening = false;
+						this.btnString = 'Start';
+					});
+
+				setTimeout(() => {
+					this._socketSvc.SendStr('a');
+				}, 3000);
 			} else {
 				this.msgs.push('Stop Listening...');
+				this._socketSvc.StopListening();
 
-				this.isListening = false;
+				this._isListening = false;
 				this.btnString = 'Start';
 			}
 		}
