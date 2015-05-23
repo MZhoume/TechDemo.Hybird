@@ -7,6 +7,8 @@ module app.home {
 
 	class ChartCtrl implements IChartCtrl {
 		title: string;
+		
+		HasControl: boolean = false;
 
 		constructor() {
 			this.title = 'Chart';

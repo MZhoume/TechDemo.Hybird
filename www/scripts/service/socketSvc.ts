@@ -16,8 +16,11 @@ module app.service {
 	class SocketSvc implements ISocketSvc {
 		private _isListening: boolean;
 		private _socket: WebSocket;
+		private _gotDirective: boolean;
 
-		constructor() {
+		static $inject = ['DataSvc', '$ionicLoading'];
+		constructor(private _dataSvc: app.service.IDataSvc,
+			private _ionicLoading: Ionic.ILoading) {
 		}
 
 		StartListening(ipAddr: string, portNum: number, callback: (msg: MessageEvent) => void,
@@ -25,17 +28,27 @@ module app.service {
 			console.log('Connectiong to: ' + ipAddr + ':' + portNum);
 			this._isListening = true;
 
+			this._ionicLoading.show({
+				template: 'Retrieving data...<br />Please wait...'
+			})
 			try {
 				this._socket = new WebSocket("ws://" + ipAddr + ':' + portNum);
-				this._socket.onmessage = callback;
+				this._socket.onmessage = (msg) => {
+					this._dataSvc.onMsgReceived(msg);
+					callback(msg);
+
+					if (!this._gotDirective) {
+						this._ionicLoading.hide();
+						this._gotDirective = true;
+					}
+				};
+				this._socket.onerror = e => {
+					this._ionicLoading.hide();
+					errCallback('An error occured from the WebSocket...');
+				};
 			} catch (err) {
+				this._ionicLoading.hide();
 				errCallback(err);
-			} finally {
-				if (this._socket.readyState != WebSocket.OPEN && this._socket.readyState != WebSocket.CONNECTING) {
-					errCallback('An error occured while connecting to server...');
-					return;
-				}
-				this._socket.onerror = e => errCallback('Error -- ' + e.timeStamp.toString());
 			}
 		}
 

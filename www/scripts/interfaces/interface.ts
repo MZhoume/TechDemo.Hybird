@@ -2,20 +2,19 @@
 
 module app.interfaces {
 	export interface IMonitorCtrl {
-		Data: IDataModel[];
+		data: IDataModel[];
 	}
 
 	export interface ISocketCtrl {
-		Introduction: string;
-		DataCtrl: string;
-		Directive: string;
+		introduction: string;
+		directive: string;
 	}
 
 	export interface IDataModel {
 		rowid: number;
-		ServerID: number;
+		serverID: number;
 		
-		Names: string[];
-		Values: number[];
+		names: string[];
+		values: number[];
 	}
 }

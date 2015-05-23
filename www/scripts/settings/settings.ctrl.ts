@@ -25,11 +25,10 @@ module app.settings {
 
 		private _isListening: boolean = false;
 
-		static $inject = ['$scope', 'SocketSvc', '$ionicPopup', 'DataSvc', '$ionicModal'];
+		static $inject = ['$scope', 'SocketSvc', '$ionicPopup', '$ionicModal'];
 		constructor(private _scope: IModelScope,
 			private _socketSvc: app.service.ISocketSvc,
 			private _ionicPopup: Ionic.IPopup,
-			private _dataSvc: app.service.IDataSvc,
 			private _ionicModel: Ionic.IModal) {
 			_ionicModel.fromTemplateUrl('../../settings/settings.html', {
 				scope: _scope,
@@ -57,7 +56,6 @@ module app.settings {
 				this._socketSvc.StartListening(this.ipAddress, this.portNum,
 					(msg) => {
 						this.msgs.push("Data received at " + msg.timeStamp);
-						this._dataSvc.onMsgReceived(msg);
 					},
 					(err) => {
 						this.msgs.push(err);
@@ -69,10 +67,6 @@ module app.settings {
 						this._isListening = false;
 						this.btnString = 'Start';
 					});
-
-				setTimeout(() => {
-					this._socketSvc.SendStr('a');
-				}, 3000);
 			} else {
 				this.msgs.push('Stop Listening...');
 				this._socketSvc.StopListening();

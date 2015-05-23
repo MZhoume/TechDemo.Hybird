@@ -23,36 +23,37 @@ angular.module('app', ['ionic'])
   .config(function ($stateProvider, $urlRouterProvider) {
   $stateProvider
     .state('introduction', {
-      url: '/introduction',
-      templateUrl: 'introduction/introduction.html',
-      controller: 'IntroductionCtrl as vm'
-    })
-  
-    .state('home', {
-      abstract: true,
-      url: "/home",
-      templateUrl: "home/home.html"
+    url: '/introduction',
+    templateUrl: 'introduction/introduction.html',
+    controller: 'IntroductionCtrl as vm'
   })
-  
+
+    .state('home', {
+    abstract: true,
+    cache: false,
+    url: "/home",
+    templateUrl: "home/home.html"
+  })
+
     .state('home.monitor', {
-      url: '/monitor',
-      views: {
-        'tabMonitor': {
-          templateUrl: 'home/monitor.html',
-          controller: 'home.MonitorCtrl as vm'
-        }
+    url: '/monitor',
+    views: {
+      'tabMonitor': {
+        templateUrl: 'home/monitor.html',
+        controller: 'home.MonitorCtrl as vm'
       }
-    })
-    
+    }
+  })
+
     .state('home.chart', {
-      url: '/chart',
-      views: {
-        'tabChart': {
-          templateUrl: 'home/chart.html',
-          controller: 'home.ChartCtrl as vm'
-        }
+    url: '/chart',
+    views: {
+      'tabChart': {
+        templateUrl: 'home/chart.html',
+        controller: 'home.ChartCtrl as vm'
       }
-    });
+    }
+  });
     
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/introduction');

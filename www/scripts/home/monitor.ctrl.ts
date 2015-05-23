@@ -2,16 +2,20 @@
 
 module app.home {
 	class MonitorCtrl implements app.interfaces.IMonitorCtrl {
-		Data: app.interfaces.IDataModel[];
+		data: app.interfaces.IDataModel[] = [{
+			rowid: 0,
+			serverID: 1,
+			names: ['aaa', 'bbb', 'ccc'],
+			values: [2, 3, 4]
+		}, {
+				rowid: 1,
+				serverID: 2,
+				names: ['a', 'b', 'c'],
+				values: [12, 13, 14]
+			}];
 
 		static $inject = ['DataSvc'];
 		constructor(private _dataSvc: app.service.IDataSvc) {
-			this.Data = [{
-				rowid: 0,
-				ServerID: 1,
-				Names: ['aaa', 'bbb', 'ccc'],
-				Values: [2, 3, 4]
-			}];
 		}
 	}
 

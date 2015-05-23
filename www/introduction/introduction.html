@@ -1,6 +1,9 @@
 <ion-view title="Introduction">
 	<ion-content>
 		<h1>Introduction</h1>
-		<p>{{vm.introduction}}</p>
+		<br />
+		<h4 ng-include="'intro.html'" class="positive" ></h4>
+		<br />
+		<a ng-click="showModal()" class="button button-block button-positive">Go to settings</a>
 	</ion-content>
 </ion-view>

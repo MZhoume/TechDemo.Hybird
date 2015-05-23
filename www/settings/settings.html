@@ -21,7 +21,7 @@
 		<br />
 		<ion-list>
 			<ion-item class="item-divider">Messages from socket ws://{{vm.ipAddress}}:{{vm.portNum}} -></ion-item>
-			<ion-item ng-repeat="msg in vm.msgs">{{msg}}</ion-item>
+			<ion-item class="item-text-wrap" ng-repeat="msg in vm.msgs">{{msg}}</ion-item>
 		</ion-list>
 	</ion-content>
 </ion-modal-view>

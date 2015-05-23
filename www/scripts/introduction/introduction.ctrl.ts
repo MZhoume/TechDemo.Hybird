@@ -6,13 +6,10 @@ module app.introduction{
 	}
 	
 	class IntroductionCtrl implements IIntroductionCtrl{
-		introduction: string = 'Please open settings pane for connecting to the server.';
+		introduction: string;
 		
 		static $inject = ['DataSvc'];
 		constructor(private _dataSvc: app.service.IDataSvc) {
-			this._dataSvc.onIntroductionReceived = i => {
-				this.introduction = i;
-			}
 		}
 	}
 	
