@@ -1,10 +1,15 @@
 /// <reference path="../_reference.ts" />
 
 module app.home {
-	class MonitorCtrl {
-		static $inject = ['DataSvc', '$scope'];
+	interface IMonitorCtrl {
+		drawChart(id: number): void;
+	}
+
+	class MonitorCtrl implements IMonitorCtrl {
+		static $inject = ['DataSvc', '$scope', '$state'];
 		constructor(private _dataSvc: app.service.IDataSvc,
-			private _scope: app.interfaces.IMonitorScope) {
+			private _scope: app.interfaces.IMonitorScope,
+			private _state: angular.ui.IStateService) {
 			this._scope.data = [];
 
 			_dataSvc.onDataReceived = d => {
@@ -15,12 +20,17 @@ module app.home {
 				this._scope.$apply();
 			};
 
-			var dat = _dataSvc.data[_dataSvc.data.length - 1];
-			if (dat != undefined) {
-				dat.forEach(e => {
-					this._scope.data.push(e);
-				}, this);
+			var count = _dataSvc.data.length;
+			if (count > 0) {
+				for (var i = 0; i < count; i++) {
+					var element = _dataSvc.data[i][_dataSvc.data[i].length - 1];
+					_scope.data.push(element);
+				}
 			}
+		}
+
+		drawChart(id: number): void {
+			this._state.go('home.chart', { "id": id });
 		}
 	}
 

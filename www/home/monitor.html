@@ -1,7 +1,10 @@
 <ion-view title="Monitor">
 	<ion-content class="padding">
 		<ion-list type="card" ng-repeat="d in data">
-			<ion-item class="item-divider">Server ID: {{d.ServerID}}</ion-item>
+			<a ng-click="vm.drawChart(d.ServerID)" class="item item-divider item-icon-right">
+				Server ID: {{d.ServerID}}
+				<i class="icon ion-chevron-right icon-accessory"></i>
+			</a>
 			<ion-item class="row">
 				<div class="col" ng-repeat="n in d.Names">{{n}}</div>
 			</ion-item>

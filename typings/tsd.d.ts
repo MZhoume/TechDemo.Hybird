@@ -11,3 +11,5 @@
 /// <reference path="ionic/ngcordova.d.ts" />
 /// <reference path="jquery/jquery.d.ts" />
 /// <reference path="node/node.d.ts" />
+/// <reference path="chartjs/chart.d.ts" />
+/// <reference path="angular-ui-router/angular-ui-router.d.ts" />

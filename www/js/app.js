@@ -7,7 +7,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('app', ['ionic'])
+angular.module('app', ['ionic', 'chart.js'])
 
   .run(function ($ionicPlatform) {
   $ionicPlatform.ready(function () {
@@ -39,7 +39,6 @@ angular.module('app', ['ionic'])
 
     .state('home.monitor', {
     url: '/monitor',
-    cache: false,
     views: {
       'tabMonitor': {
         templateUrl: 'home/monitor.html',
@@ -49,7 +48,7 @@ angular.module('app', ['ionic'])
   })
 
     .state('home.chart', {
-    url: '/chart',
+    url: '/chart/:id',
     cache: false,
     views: {
       'tabChart': {
