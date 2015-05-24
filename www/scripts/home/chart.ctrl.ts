@@ -9,12 +9,12 @@ module app.home {
 	
 	interface IChartCtrl{
 		id: number;
+		model: app.interfaces.IDataModel;
 	}
 
 	class ChartCtrl implements IChartCtrl {
-		private count: number;
-
 		id: number;
+		model: app.interfaces.IDataModel;
 
 		static $inject = ['$stateParams', 'DataSvc', '$state', '$scope'];
 		constructor(private _stateParams: angular.ui.IStateParamsService,
@@ -22,7 +22,6 @@ module app.home {
 			private _state: angular.ui.IStateService,
 			private _scope: IChartScope) {
 			this.id = parseInt(_stateParams['id']);
-			this.count = 1;
 
 			if (_dataSvc.data.length == 0) {
 				return;
@@ -30,14 +29,14 @@ module app.home {
 
 			var dats = _dataSvc.data[this.id];
 			var model = dats[0];
+			this.model = dats[dats.length - 1];
 
 			_scope.series = model.Names;
 			_scope.labels = [];
 			_scope.data = [];
 
 			for (var i = 0; i < dats.length; i++) {
-				_scope.labels.push(this.count.toString());
-				this.count++;
+				_scope.labels.push((i+1).toString());
 
 				for (var j = 0; j < model.Names.length; j++) {
 					_scope.data[j] = _scope.data[j] || <number[]>[];
@@ -54,8 +53,7 @@ module app.home {
 					this._scope.data[i].push(v);
 				}
 				
-				this._scope.labels.push(this.count.toString());
-				this.count++;
+				this.model = d[this.id];
 				
 				this._scope.$apply();
 			};

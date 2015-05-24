@@ -8,7 +8,7 @@ module app.service {
 
 		onDataReceived: (data: app.interfaces.IDataModel[]) => void;
 		onIntroductionReceived: (intro: string) => void;
-		onDirectiveReceived: (dir: string) => void;
+		//onDirectiveReceived: (dir: string) => void;
 	}
 
 	class DataSvc implements app.service.IDataSvc {
@@ -24,9 +24,9 @@ module app.service {
 		onMsgReceived(msg: MessageEvent): void {
 			var payload = JSON.parse(msg.data);
 
-			if (payload.directive) {
+			if (payload.introduction) {
 				this.onIntroductionReceived.call(this, payload.introduction);
-				this.onDirectiveReceived.call(this, payload.directive);
+				//this.onDirectiveReceived.call(this, payload.directive);
 				//this._templateCache.put('control.html', payload.directive);
 			} else {
 				for (var i = 0; i < payload.length; i++) {
@@ -42,7 +42,7 @@ module app.service {
 
 		onDataReceived: (data: app.interfaces.IDataModel[]) => void = () => { }
 		onIntroductionReceived: (intro: string) => void = () => { }
-		onDirectiveReceived: (dir: string) => void = () => { }
+		//onDirectiveReceived: (dir: string) => void = () => { }
 	}
 
 	angular.module('app')

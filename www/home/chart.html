@@ -2,5 +2,18 @@
 	<ion-content class="padding" id="content">
 		<canvas id="line" class="chart chart-line" data="data" 
 		labels="labels" legent="true" series="series"></canvas>
+		<br />
+		<br />
+		<ion-list type="card" ng-show="vm.model">
+			<ion-item class="item-divider">
+				Server ID: {{vm.model.ServerID}}
+			</ion-item>
+			<ion-item class="row">
+				<div class="col" ng-repeat="n in vm.model.Names">{{n}}</div>
+			</ion-item>
+			<ion-item class="row">
+				<div class="col" ng-repeat="v in vm.model.Values">{{v}}</div>
+			</ion-item>
+		</ion-list>
 	</ion-content>
 </ion-view>
