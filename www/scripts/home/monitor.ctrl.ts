@@ -1,21 +1,26 @@
 /// <reference path="../_reference.ts" />
 
 module app.home {
-	class MonitorCtrl implements app.interfaces.IMonitorCtrl {
-		data: app.interfaces.IDataModel[] = [{
-			rowid: 0,
-			serverID: 1,
-			names: ['aaa', 'bbb', 'ccc'],
-			values: [2, 3, 4]
-		}, {
-				rowid: 1,
-				serverID: 2,
-				names: ['a', 'b', 'c'],
-				values: [12, 13, 14]
-			}];
+	class MonitorCtrl {
+		static $inject = ['DataSvc', '$scope'];
+		constructor(private _dataSvc: app.service.IDataSvc,
+			private _scope: app.interfaces.IMonitorScope) {
+			this._scope.data = [];
 
-		static $inject = ['DataSvc'];
-		constructor(private _dataSvc: app.service.IDataSvc) {
+			_dataSvc.onDataReceived = d => {
+				for (var i = 0; i < d.length; i++) {
+					var element = d[i];
+					this._scope.data[i] = element;
+				}
+				this._scope.$apply();
+			};
+
+			var dat = _dataSvc.data[_dataSvc.data.length - 1];
+			if (dat != undefined) {
+				dat.forEach(e => {
+					this._scope.data.push(e);
+				}, this);
+			}
 		}
 	}
 

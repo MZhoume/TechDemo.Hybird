@@ -7,37 +7,39 @@ module app.service {
 		onMsgReceived(msg: MessageEvent): void;
 
 		onDataReceived: (data: app.interfaces.IDataModel[]) => void;
+		onIntroductionReceived: (intro: string) => void;
 	}
 
 	class DataSvc implements app.service.IDataSvc {
-		data: app.interfaces.IDataModel[][];
+		data: app.interfaces.IDataModel[][] = [];
 
 		private _hasInited: boolean;
 
 		static $inject = ['$templateCache'];
 		constructor(private _templateCache: angular.ITemplateCacheService) {
-			_templateCache.put('intro.html', 'Please open settings pane for connecting to the server.');
+			_templateCache.put('control.html', '');
 		}
 
 		onMsgReceived(msg: MessageEvent): void {
-			if (!this._hasInited) {
-				this._hasInited = true;
+			var payload = JSON.parse(msg.data);
 
-				var payload = <app.interfaces.ISocketCtrl>JSON.parse(msg.data);
-				this._templateCache.put('intro.html', payload.introduction);
+			if (payload.directive) {
+				this.onIntroductionReceived.call(this, payload.introduction);
 				this._templateCache.put('control.html', payload.directive);
 			} else {
-				var data = <app.interfaces.IDataModel[]>JSON.parse(msg.data);
-
-				for (var i = 0; i < data.length; i++) {
-					var e = data[i];
+				for (var i = 0; i < payload.length; i++) {
+					var e = payload[i];
+					if (!this.data[i]) {
+						this.data[i] = [];
+					}
 					this.data[i].push(e);
 				}
-				this.onDataReceived(data);
+				this.onDataReceived(payload);
 			}
 		}
 
 		onDataReceived: (data: app.interfaces.IDataModel[]) => void = () => { }
+		onIntroductionReceived: (intro: string) => void;
 	}
 
 	angular.module('app')

@@ -22,14 +22,16 @@ module app.settings {
 		portNum: number;
 		msgs: string[] = [];
 		btnString: string = 'Start';
+		private _gotDirective: boolean;
 
 		private _isListening: boolean = false;
 
-		static $inject = ['$scope', 'SocketSvc', '$ionicPopup', '$ionicModal'];
+		static $inject = ['$scope', 'SocketSvc', '$ionicPopup', '$ionicModal', '$ionicLoading'];
 		constructor(private _scope: IModelScope,
 			private _socketSvc: app.service.ISocketSvc,
 			private _ionicPopup: Ionic.IPopup,
-			private _ionicModel: Ionic.IModal) {
+			private _ionicModel: Ionic.IModal,
+			private _ionicLoading: Ionic.ILoading) {
 			_ionicModel.fromTemplateUrl('../../settings/settings.html', {
 				scope: _scope,
 				animation: 'slide-in-up'
@@ -53,11 +55,22 @@ module app.settings {
 				this._isListening = true;
 				this.btnString = 'Stop';
 
+				this._ionicLoading.show({
+					template: 'Retrieving data...<br />Please wait...'
+				})
 				this._socketSvc.StartListening(this.ipAddress, this.portNum,
 					(msg) => {
 						this.msgs.push("Data received at " + msg.timeStamp);
+
+
+						if (!this._gotDirective) {
+							this._scope.$broadcast('refresh');
+							this._ionicLoading.hide();
+							this._gotDirective = true;
+						}
 					},
 					(err) => {
+						this._ionicLoading.hide();
 						this.msgs.push(err);
 						this._ionicPopup.show({
 							title: 'Error!',

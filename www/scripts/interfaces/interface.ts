@@ -1,8 +1,12 @@
 /// <reference path="../_reference.ts" />
 
 module app.interfaces {
-	export interface IMonitorCtrl {
-		data: IDataModel[];
+	export interface IMonitorScope extends angular.IScope {
+		data: app.interfaces.IDataModel[];
+	}
+	
+	export interface ISocketClient {
+		isStopIntended: boolean;
 	}
 
 	export interface ISocketCtrl {
