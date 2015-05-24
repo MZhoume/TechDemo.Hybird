@@ -8,6 +8,7 @@ module app.service {
 
 		onDataReceived: (data: app.interfaces.IDataModel[]) => void;
 		onIntroductionReceived: (intro: string) => void;
+		onDirectiveReceived: (dir: string) => void;
 	}
 
 	class DataSvc implements app.service.IDataSvc {
@@ -17,7 +18,7 @@ module app.service {
 
 		static $inject = ['$templateCache'];
 		constructor(private _templateCache: angular.ITemplateCacheService) {
-			_templateCache.put('control.html', '');
+			//_templateCache.put('control.html', '');
 		}
 
 		onMsgReceived(msg: MessageEvent): void {
@@ -25,7 +26,8 @@ module app.service {
 
 			if (payload.directive) {
 				this.onIntroductionReceived.call(this, payload.introduction);
-				this._templateCache.put('control.html', payload.directive);
+				this.onDirectiveReceived.call(this, payload.directive);
+				//this._templateCache.put('control.html', payload.directive);
 			} else {
 				for (var i = 0; i < payload.length; i++) {
 					var e = payload[i];
@@ -39,9 +41,23 @@ module app.service {
 		}
 
 		onDataReceived: (data: app.interfaces.IDataModel[]) => void = () => { }
-		onIntroductionReceived: (intro: string) => void;
+		onIntroductionReceived: (intro: string) => void = () => { }
+		onDirectiveReceived: (dir: string) => void = () => { }
 	}
 
 	angular.module('app')
 		.service('DataSvc', DataSvc);
+//	
+//	DataSvc.prototype.onDirectiveReceived = function(d: string): void {
+//		angular.module('app').directive('control', function() {
+//			return {
+//				restrict: 'E',
+//				template: d,
+//				replace: true,
+//				scope: {
+//					content: '='
+//				}
+//			}
+//		});
+//	};
 }

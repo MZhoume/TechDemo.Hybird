@@ -62,9 +62,7 @@ module app.settings {
 					(msg) => {
 						this.msgs.push("Data received at " + msg.timeStamp);
 
-
 						if (!this._gotDirective) {
-							this._scope.$broadcast('refresh');
 							this._ionicLoading.hide();
 							this._gotDirective = true;
 						}

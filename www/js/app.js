@@ -1,3 +1,6 @@
+/// <reference path="../scripts/_reference.ts" />
+
+
 // Ionic Starter App
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
@@ -30,13 +33,13 @@ angular.module('app', ['ionic'])
 
     .state('home', {
     abstract: true,
-    cache: false,
     url: "/home",
     templateUrl: "home/home.html"
   })
 
     .state('home.monitor', {
     url: '/monitor',
+    cache: false,
     views: {
       'tabMonitor': {
         templateUrl: 'home/monitor.html',
@@ -47,6 +50,7 @@ angular.module('app', ['ionic'])
 
     .state('home.chart', {
     url: '/chart',
+    cache: false,
     views: {
       'tabChart': {
         templateUrl: 'home/chart.html',
@@ -57,4 +61,4 @@ angular.module('app', ['ionic'])
     
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/introduction');
-});
+  });

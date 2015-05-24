@@ -1,8 +1,13 @@
 <ion-view title="Monitor">
 	<ion-content class="padding">
 		<ion-list type="card" ng-repeat="d in data">
-			<ion-item class="item-divider"></ion-item>
-			<div ng-include="'control.html'" ></div>
+			<ion-item class="item-divider">Server ID: {{d.ServerID}}</ion-item>
+			<ion-item class="row">
+				<div class="col" ng-repeat="n in d.Names">{{n}}</div>
+			</ion-item>
+			<ion-item class="row">
+				<div class="col" ng-repeat="v in d.Values">{{v}}</div>
+			</ion-item>
 		</ion-list>
 	</ion-content>
 </ion-view>
