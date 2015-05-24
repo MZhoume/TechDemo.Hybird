@@ -60,4 +60,4 @@ angular.module('app', ['ionic', 'chart.js'])
     
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/introduction');
-  });
+});

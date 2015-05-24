@@ -1,12 +1,14 @@
 /// <reference path="../_reference.ts" />
 
 module app.home {
-	interface IChartCtrl {
-		id: number;
-
+	interface IChartScope extends angular.IScope {
 		labels: string[];
 		series: string[];
 		data: number[][];
+	}
+	
+	interface IChartCtrl{
+		id: number;
 	}
 
 	class ChartCtrl implements IChartCtrl {
@@ -14,14 +16,11 @@ module app.home {
 
 		id: number;
 
-		labels: string[];
-		series: string[];
-		data: number[][];
-
-		static $inject = ['$stateParams', 'DataSvc', '$state'];
+		static $inject = ['$stateParams', 'DataSvc', '$state', '$scope'];
 		constructor(private _stateParams: angular.ui.IStateParamsService,
 			private _dataSvc: app.service.IDataSvc,
-			private _state: angular.ui.IStateService) {
+			private _state: angular.ui.IStateService,
+			private _scope: IChartScope) {
 			this.id = parseInt(_stateParams['id']);
 			this.count = 1;
 
@@ -32,24 +31,33 @@ module app.home {
 			var dats = _dataSvc.data[this.id];
 			var model = dats[0];
 
-			this.series = model.Names;
-			this.labels = [];
-			this.data = [];
+			_scope.series = model.Names;
+			_scope.labels = [];
+			_scope.data = [];
 
 			for (var i = 0; i < dats.length; i++) {
-				this.labels.push(this.count.toString());
+				_scope.labels.push(this.count.toString());
 				this.count++;
 
 				for (var j = 0; j < model.Names.length; j++) {
-					this.data[j] = this.data[j] || <number[]>[];
+					_scope.data[j] = _scope.data[j] || <number[]>[];
 
 					var v = dats[i].Values[j];
-					this.data[j].push(v);
+					_scope.data[j].push(v);
 				}
 			}
 
 			_dataSvc.onDataReceived = d => {
-				this._state.reload();
+				var ele = d[this.id];
+				for (var i = 0; i < ele.Values.length; i++) {
+					var v = ele.Values[i];
+					this._scope.data[i].push(v);
+				}
+				
+				this._scope.labels.push(this.count.toString());
+				this.count++;
+				
+				this._scope.$apply();
 			};
 		}
 	}
